@@ -17,10 +17,18 @@ cell running in production — the live audit data and business specifics are ke
 python3 scan.py --url https://example.com
 ```
 
-That runs two independent accessibility engines against the page and prints **the full
-findings list** — grouped by failure class, sorted by confidence and severity — and writes a
-`report.md` with fix owners and a `register.json` you can hand to a developer. No conformance
-claim is ever made; a clean run means "no auto-detectable failures," not "accessible."
+That runs two independent accessibility engines against the page, prints the findings, and
+writes four things to the output folder:
+
+- **`report.html`** — a styled, shareable report you open in a browser: summary tiles, findings
+  grouped by fix, severity stripes, the full register.
+- **`fix-brief.md`** — a **paste-ready remediation prompt for a coding agent** (Claude / Codex /
+  Gemini): the findings grouped by fix, each with the real selector, the failing element, and a
+  minimal-change instruction — with a guard so the agent won't declare false conformance.
+- **`register.json`** — every finding as data, for a developer or a pipeline.
+- **`report.md`** — the same findings in plain markdown.
+
+No conformance claim is ever made; a clean run means "no auto-detectable failures," not "accessible."
 
 **Needs:** [Node.js](https://nodejs.org) and Google Chrome installed. That's it — `pa11y` is
 fetched automatically on first run; there's nothing to `pip install` (Python 3 stdlib only).
@@ -125,8 +133,8 @@ python3 scan.py --url https://example.com [--title "Home"] [--out ./my-audit] [-
 axe-core (two *independent* engines, Canon 004) — normalizes both into one findings register
 (`defect · WCAG criterion · severity · engine · selector · class`, Canon 007), classifies each
 into the six WebAIM failure classes (Canon 008), marks anything both engines caught as
-corroborated, and writes `pa11y-*.json` (raw evidence), `register.json`, and `report.md` to the
-output folder — plus a summary to your terminal.
+corroborated, and writes `report.html`, `fix-brief.md`, `register.json`, `report.md`, and the
+raw `pa11y-*.json` to the output folder — plus a summary to your terminal.
 
 **What you need:** Node.js + Google Chrome. `pa11y` installs itself on first run via `npx`.
 Chrome is auto-detected on macOS/Linux/Windows; override with `--chrome`.
