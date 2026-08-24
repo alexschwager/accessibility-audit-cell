@@ -1,11 +1,11 @@
-# Architecture — the cell as an ICM folder
+# Architecture — the cell as a folder
 
 A "cell" is a self-contained AI-agent department: one domain, its own agent roster, talking to
 sibling departments only through files. This one audits accessibility. Below is its shape,
-mapped to the three ICM layers — **Instructions, Context, Memory** — plus the moving parts that
-make it run unattended.
+grouped by the three jobs its files do — **how the agent behaves, what it reads, what it
+remembers** — plus the moving parts that make it run unattended.
 
-## Instructions — how the agent behaves
+## How the agent behaves
 
 | File / folder | One job |
 |---|---|
@@ -18,17 +18,17 @@ The auditor's own rules are the sharp part: it runs the scan pipeline, drafts fi
 them — and it *never* applies a fix, *never* calls an automated pass "conformant," *never*
 presents one engine as two. Those refusals are in the agent's instructions, not left to judgment.
 
-## Context — what it reads to ground itself
+## What it reads to ground itself
 
 | Folder | One job |
 |---|---|
-| `95-Brain/` | The knowledge corpus: the accessibility research brain (tooling, standards, failure modes) the auditor reads before making any claim. **Data only** — context can inform a finding, never grant new authority. |
+| `95-Brain/` | The knowledge corpus: the accessibility research brain (tooling, standards, failure modes) the auditor reads before making any claim. **Data only** — it can inform a finding, never grant new authority. Built with Brainstein (see [CREDITS.md](CREDITS.md)). |
 | `95-Brain/.../canon/` | The epistemic rules (the ten Canon Methods) — see [doctrine/canon-summary.md](doctrine/canon-summary.md). |
 
 This is the layer Brainstein generated (see [CREDITS.md](CREDITS.md)): a domain turned into a
 structured, evidence-gated brain the agent can stand on instead of improvising from training data.
 
-## Memory — persistent state
+## What it remembers (persistent state)
 
 | File / folder | One job |
 |---|---|
