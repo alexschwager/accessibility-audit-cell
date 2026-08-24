@@ -131,6 +131,14 @@ output folder — plus a summary to your terminal.
 **What you need:** Node.js + Google Chrome. `pa11y` installs itself on first run via `npx`.
 Chrome is auto-detected on macOS/Linux/Windows; override with `--chrome`.
 
+> **⚠️ Single-page apps (React / Vue / Nuxt / Angular): raise `--wait`.** These render
+> *after* the page loads, so a scan that fires too early audits an empty shell and reports a
+> near-clean **false green** — the single most dangerous result in this whole domain. The
+> scanner waits `--wait 1500`ms by default; for content that streams in from an API, use
+> `--wait 5000` or more. Real example: a live cruise-search page scored **1 finding** at the
+> default and **61** once given 6 seconds to hydrate. If your findings count looks
+> implausibly low, that's the first thing to check.
+
 **What it deliberately does *not* do** — because pretending otherwise is the failure this whole
 project is about:
 

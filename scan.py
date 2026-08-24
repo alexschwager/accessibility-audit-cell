@@ -80,12 +80,17 @@ def wcag_from_htmlcs(code: str) -> str:
     return f"{m.group(1)}.{m.group(2)}.{m.group(3)}" if m else "—"
 
 
-def run_pa11y(url: str, runner: str, raw_out: Path, chrome: str, timeout_s: int) -> list:
+def run_pa11y(url: str, runner: str, raw_out: Path, chrome: str,
+              timeout_s: int, wait_ms: int) -> list:
     """Run pa11y with one runner; write raw JSON; return the parsed issue list."""
     config = raw_out.parent / f".pa11y-config-{runner}.json"
     config.write_text(json.dumps({
         "chromeLaunchConfig": {"executablePath": chrome},
         "timeout": timeout_s * 1000,
+        # Single-page apps (React/Vue/Nuxt) render AFTER load — audit too early and you
+        # scan an empty shell (a false green). `wait` holds before testing so the app
+        # hydrates. Raise it for content that streams in from an API.
+        "wait": wait_ms,
     }), encoding="utf-8")
     env = dict(os.environ, PUPPETEER_SKIP_DOWNLOAD="true",
                PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true")
@@ -138,6 +143,9 @@ def main(argv=None) -> int:
     p.add_argument("--title", default=None, help="human label for the surface")
     p.add_argument("--chrome", default=None, help="path to Chrome (auto-detected otherwise)")
     p.add_argument("--timeout", type=int, default=180, help="per-engine timeout, seconds")
+    p.add_argument("--wait", type=int, default=1500,
+                   help="ms to wait before auditing so single-page apps hydrate "
+                        "(raise to 4000+ for content that streams from an API)")
     a = p.parse_args(argv)
 
     chrome = find_chrome(a.chrome)
@@ -146,10 +154,13 @@ def main(argv=None) -> int:
     out.mkdir(parents=True, exist_ok=True)
 
     register = []
-    print(f"Auditing {a.url}\n  Chrome: {chrome}\n  Output: {out}/\n")
+    print(f"Auditing {a.url}\n  Chrome: {chrome}\n  Wait:   {a.wait}ms "
+          f"(raise with --wait if this is an API-driven single-page app)\n"
+          f"  Output: {out}/\n")
     for runner in ("htmlcs", "axe"):
         print(f"  running pa11y ({runner}) …", flush=True)
-        issues = run_pa11y(a.url, runner, out / f"pa11y-{runner}.json", chrome, a.timeout)
+        issues = run_pa11y(a.url, runner, out / f"pa11y-{runner}.json",
+                           chrome, a.timeout, a.wait)
         register.extend(normalize(issues, runner))
 
     # Corroboration: same (wcag, selector) seen by both engines (Canon 004).
