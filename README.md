@@ -1,6 +1,6 @@
 # Accessibility Audit Cell
 
-**A case study and reusable template: an autonomous accessibility-audit department that scans
+**A case study and a reusable pattern: an autonomous accessibility-audit department that scans
 live web surfaces, verifies them with real assistive technology, and hands back
 criterion-anchored findings — without ever overclaiming conformance.**
 
@@ -10,6 +10,35 @@ cell running in production — the live audit data and business specifics are ke
 *What's here / what isn't*).
 
 ---
+
+## Start here
+
+**This repo is a design to read and adapt — not an app to clone and run.** The working cell
+lives inside a private agent system; what's public here is the part worth sharing: the
+architecture, the doctrine, and a worked example. **There is nothing to install.**
+
+**What's actually in this repo** (2 minutes to orient):
+
+| File | What it is |
+|---|---|
+| `README.md` | You're here — what the cell is and why it's shaped this way. |
+| [`doctrine/canon-summary.md`](doctrine/canon-summary.md) | The ten rules every finding obeys — the reusable core, and the part most worth your time. |
+| [`example/illustrative-audit.md`](example/illustrative-audit.md) | What an audit's output looks like (synthetic data). |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | The folder-by-folder walk-through of how the cell is organised. |
+| [`CREDITS.md`](CREDITS.md) · [`NOTICE.md`](NOTICE.md) · [`LICENSE`](LICENSE) | Attributions and terms (MIT). |
+
+**Read them in this order:** this README (the what + why) → `doctrine/canon-summary.md` (the
+discipline) → `example/illustrative-audit.md` (the discipline as concrete output) →
+`ARCHITECTURE.md` (only if you're going to build the whole thing).
+
+**Then pick your path:**
+
+- **Just want a more honest a11y process?** Take the three invariants and the findings contract
+  (both below) and bolt them onto whatever tools you already run. That alone stops the most
+  common audit failure — calling a page "compliant" off a green automated scan.
+- **Want to build your own audit cell?** Follow [*Adapting this to your own domain*](#adapting-this-to-your-own-domain)
+  near the bottom: keep the folder shape, swap the domain brain, rewrite the Canon for your
+  field's "clean scan ≠ done" trap, keep the invariants.
 
 ## Why accessibility auditing is hard to automate honestly
 
@@ -35,6 +64,9 @@ A "cell" is a self-contained AI-agent department: one domain, its own agent rost
 sibling teams only through files. This one audits accessibility. It's a **folder where each file
 does one job**, so a cold model (or a new teammate) opens exactly the file it needs and stops —
 instead of swallowing a 100k-line prompt to answer one question.
+
+Here's the shape of the **running cell** (not this public repo — this repo holds the design and
+doctrine for it; see *Start here* for what's actually in these files):
 
 ```
 accessibility/
