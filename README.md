@@ -13,6 +13,10 @@ cell running in production — the live audit data and business specifics are ke
 
 ## Start here — scan a page
 
+> **First time? → [GETTING-STARTED.md](GETTING-STARTED.md)** walks you through it step by step
+> (what to install, your first scan, reading the report, handing the fixes to an AI) — written
+> for people who've never used a scanner before. The quick version is right here:
+
 ```bash
 python3 scan.py --url https://example.com
 ```
@@ -44,6 +48,7 @@ part most worth your time — is the doctrine:
 
 | File | What it is |
 |---|---|
+| [`GETTING-STARTED.md`](GETTING-STARTED.md) | Step-by-step first run, for people new to this. |
 | [`scan.py`](scan.py) | The runnable scanner above — one URL in, findings out. |
 | [`doctrine/canon-summary.md`](doctrine/canon-summary.md) | The ten rules every finding obeys — the reusable core. |
 | [`example/illustrative-audit.md`](example/illustrative-audit.md) | What an audit's output looks like, annotated. |
