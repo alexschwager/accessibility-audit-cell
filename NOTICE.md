@@ -3,9 +3,8 @@
 ## Original work
 
 The doctrine summaries, architecture writeup, and examples in this repository are original work
-by the author (the accessibility cell's operator), released for the community to learn from and
-adapt. Choose and add your own `LICENSE` before others depend on it — a permissive license
-(MIT / CC-BY-4.0) matches the intent of sharing the pattern; that choice is the author's to make.
+by the author (the accessibility cell's operator), released **under the MIT License** (see
+[`LICENSE`](LICENSE)) for the community to learn from and adapt.
 
 ## Brainstein (Apache-2.0)
 

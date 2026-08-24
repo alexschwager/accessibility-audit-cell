@@ -107,6 +107,9 @@ running cell enforces this split with a publishing policy; this repo is the sani
 
 This cell stands on two communities' work — see [CREDITS.md](CREDITS.md):
 
-- **Interpretable Context Methodology** — the *Clief Notes* community.
-- **Brainstein** (Apache-2.0) — the research-brain generator from Daniel Agrici's *AI
-  Marketing Hub Pro*, which generated this cell's knowledge corpus and vault scaffolding.
+- **Interpretable Context Methodology** — the [Clief Notes](https://www.skool.com/cliefnotes/about?ref=b2a583ea4cd142a39b73210fbf731d55) community.
+- **[Brainstein](https://github.com/AI-Marketing-Hub/Brainstein)** (Apache-2.0) — the
+  research-brain generator from Daniel Agrici's [AI Marketing Hub Pro](https://www.skool.com/ai-marketing-hub-pro/about?ref=b2a583ea4cd142a39b73210fbf731d55),
+  which generated this cell's knowledge corpus and vault scaffolding.
+
+Licensed **MIT** (see [LICENSE](LICENSE)) — use it, adapt it, ship your own.
