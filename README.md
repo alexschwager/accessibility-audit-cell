@@ -11,34 +11,40 @@ cell running in production — the live audit data and business specifics are ke
 
 ---
 
-## Start here
+## Start here — scan a page
 
-**This repo is a design to read and adapt — not an app to clone and run.** The working cell
-lives inside a private agent system; what's public here is the part worth sharing: the
-architecture, the doctrine, and a worked example. **There is nothing to install.**
+```bash
+python3 scan.py --url https://example.com
+```
 
-**What's actually in this repo** (2 minutes to orient):
+That runs two independent accessibility engines against the page and prints **the full
+findings list** — grouped by failure class, sorted by confidence and severity — and writes a
+`report.md` with fix owners and a `register.json` you can hand to a developer. No conformance
+claim is ever made; a clean run means "no auto-detectable failures," not "accessible."
+
+**Needs:** [Node.js](https://nodejs.org) and Google Chrome installed. That's it — `pa11y` is
+fetched automatically on first run; there's nothing to `pip install` (Python 3 stdlib only).
+More options and what the output means: [*Run it*](#run-it) below.
+
+> Try it on a deliberately-broken page to see it work:
+> `python3 scan.py --url https://www.w3.org/WAI/demos/bad/before/home.html`
+
+### What else is in this repo
+
+`scan.py` is the automated-scan slice of a larger audit cell. The reusable *thinking* — the
+part most worth your time — is the doctrine:
 
 | File | What it is |
 |---|---|
-| `README.md` | You're here — what the cell is and why it's shaped this way. |
-| [`doctrine/canon-summary.md`](doctrine/canon-summary.md) | The ten rules every finding obeys — the reusable core, and the part most worth your time. |
-| [`example/illustrative-audit.md`](example/illustrative-audit.md) | What an audit's output looks like (synthetic data). |
-| [`ARCHITECTURE.md`](ARCHITECTURE.md) | The folder-by-folder walk-through of how the cell is organised. |
+| [`scan.py`](scan.py) | The runnable scanner above — one URL in, findings out. |
+| [`doctrine/canon-summary.md`](doctrine/canon-summary.md) | The ten rules every finding obeys — the reusable core. |
+| [`example/illustrative-audit.md`](example/illustrative-audit.md) | What an audit's output looks like, annotated. |
+| [`ARCHITECTURE.md`](ARCHITECTURE.md) | The folder-by-folder walk-through of the full cell. |
 | [`CREDITS.md`](CREDITS.md) · [`NOTICE.md`](NOTICE.md) · [`LICENSE`](LICENSE) | Attributions and terms (MIT). |
 
-**Read them in this order:** this README (the what + why) → `doctrine/canon-summary.md` (the
-discipline) → `example/illustrative-audit.md` (the discipline as concrete output) →
-`ARCHITECTURE.md` (only if you're going to build the whole thing).
-
-**Then pick your path:**
-
-- **Just want a more honest a11y process?** Take the three invariants and the findings contract
-  (both below) and bolt them onto whatever tools you already run. That alone stops the most
-  common audit failure — calling a page "compliant" off a green automated scan.
-- **Want to build your own audit cell?** Follow [*Adapting this to your own domain*](#adapting-this-to-your-own-domain)
-  near the bottom: keep the folder shape, swap the domain brain, rewrite the Canon for your
-  field's "clean scan ≠ done" trap, keep the invariants.
+**Then pick your path:** take the three invariants + the findings contract (below) and bolt
+them onto whatever tools you already run — or [build your own audit cell](#adapting-this-to-your-own-domain)
+by keeping the folder shape and swapping the domain.
 
 ## Why accessibility auditing is hard to automate honestly
 
@@ -106,7 +112,35 @@ The load-bearing four:
 [example/illustrative-audit.md](example/illustrative-audit.md) shows the *shape* of the output —
 a findings register, a report, and a legal-exposure layer — using **synthetic data on a
 fictional site**. (The real audits run against a live product and are kept private for the
-obvious reason: an unremediated accessibility-failure list is a litigation roadmap.)
+obvious reason: an unremediated accessibility-failure list is a litigation roadmap.) To produce
+the real thing on a page *you* own, run [`scan.py`](#run-it).
+
+## Run it
+
+```bash
+python3 scan.py --url https://example.com [--title "Home"] [--out ./my-audit] [--chrome /path/to/chrome]
+```
+
+**What it does:** runs `pa11y` twice against the URL — once with HTML_CodeSniffer, once with
+axe-core (two *independent* engines, Canon 004) — normalizes both into one findings register
+(`defect · WCAG criterion · severity · engine · selector · class`, Canon 007), classifies each
+into the six WebAIM failure classes (Canon 008), marks anything both engines caught as
+corroborated, and writes `pa11y-*.json` (raw evidence), `register.json`, and `report.md` to the
+output folder — plus a summary to your terminal.
+
+**What you need:** Node.js + Google Chrome. `pa11y` installs itself on first run via `npx`.
+Chrome is auto-detected on macOS/Linux/Windows; override with `--chrome`.
+
+**What it deliberately does *not* do** — because pretending otherwise is the failure this whole
+project is about:
+
+- It does **not** claim conformance. Automated engines cover ~57% of issues by volume (Canon
+  003); a clean run is a floor, not a pass.
+- It does **not** verify with a real screen reader, route findings to owners, or produce a
+  legal/ACR report. Those are the parts of the full cell that need human judgment — see
+  [ARCHITECTURE.md](ARCHITECTURE.md).
+- It does **not** give legal advice. The report flags exposure to help you *prioritise*; verify
+  primary sources before any external claim (Canon 002/009).
 
 ## Adapting this to your own domain
 

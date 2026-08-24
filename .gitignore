@@ -1,0 +1,8 @@
+# scan.py output — dated audit folders and their evidence stay local
+audit-*/
+scan-*/
+*.pa11y-config*.json
+
+# python
+__pycache__/
+*.pyc
